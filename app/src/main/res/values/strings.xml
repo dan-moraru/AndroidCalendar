@@ -1,0 +1,76 @@
+<resources>
+    <string name="app_name">Calendar</string>
+
+    <string name="date_view">Date</string>
+    <string name="edit_view">EditEvent</string>
+    <string name="create_view">EditEvent</string>
+    <string name="event_view">ViewEvent</string>
+    <string name="back">Back</string>
+
+    <string name="back_button">Back</string>
+    <string name="day_with_event">●</string>
+    <string name="edit_button">Edit</string>
+    <string name="delete_button">Delete</string>
+    <string name="save_button">Save</string>
+    <string name="create_button">+</string>
+
+    <string name="between">Between</string>
+    <string name="view_event">My Event</string>
+    <string name="edit_event">Edit Event</string>
+    <string name="title_field">Title</string>
+    <string name="description_field">Description</string>
+    <string name="location_field">Location</string>
+    <string name="date_field">Date</string>
+    <string name="starttime_field">Start Time</string>
+    <string name="endtime_field">End Time</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+    <string name="confirmation_title">Confirm Deletion</string>
+    <string name="confirmation_message">This action is not reversible</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="event_deleted">Event deleted</string>
+    <string name="ok">Ok</string>
+    <string name="date_dialog_title">Pick a date</string>
+    <string name="time_dialog_title">Pick a time (Minutes are rounded by 30-min intervals)</string>
+    <string name="backwards_button">Backwards button</string>
+    <string name="forward_button">Forward button</string>
+    <string name="invalid_start_time">Start time must be at least 30 minutes before the end time!</string>
+    <string name="invalid_end_time">End time must be at least 30 minutes after the start time!</string>
+    <string name="info_description">Info icon</string>
+    <string name="date_description">Calendar icon</string>
+    <string name="save">Save</string>
+    <string name="invalid_time_range">Your time range for this event conflicts with other events!</string>
+    <string name="create_event">Create Event</string>
+    <string name="title_toast_message">Please provide a title!</string>
+    <string name="description_toast_message">Please provide a description!</string>
+    <string name="location_toast_message">Please provide a location!</string>
+    <string name="start_time_toast_message">Please provide a start time!</string>
+    <string name="end_time_toast_message">Please provide an end time!</string>
+    <string name="time_toast_message">Start time and end time must be 30 min apart!</string>
+
+    <string-array name="days">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+
+    <string-array name="months">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </string-array>
+</resources>
