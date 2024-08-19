@@ -141,7 +141,7 @@ class DateViewModelTests {
         runBlocking {
             addThreeEventToDb()
 
-            viewModel.moveDayBackwards(currentDay, ::helperCalendarFun)
+            viewModel.moveDayBackwards(currentDay, ::helperDateFun, ::helperWeatherFun)
 
             dateUiState = viewModel.dateUiState.value
         }
@@ -157,7 +157,7 @@ class DateViewModelTests {
         runBlocking {
             addThreeEventToDb()
 
-            viewModel.moveDayBackwards(currentDay, ::helperCalendarFun)
+            viewModel.moveDayBackwards(currentDay, ::helperDateFun, ::helperWeatherFun)
 
             dateUiState = viewModel.dateUiState.value
         }
@@ -173,7 +173,7 @@ class DateViewModelTests {
         runBlocking {
             addThreeEventToDb()
 
-            viewModel.moveDayForwards(currentDay, ::helperCalendarFun)
+            viewModel.moveDayForwards(currentDay, ::helperDateFun, ::helperWeatherFun)
 
             dateUiState = viewModel.dateUiState.value
         }
@@ -189,7 +189,7 @@ class DateViewModelTests {
         runBlocking {
             addThreeEventToDb()
 
-            viewModel.moveDayForwards(currentDay, ::helperCalendarFun)
+            viewModel.moveDayForwards(currentDay, ::helperDateFun, ::helperWeatherFun)
 
             dateUiState = viewModel.dateUiState.value
         }
@@ -197,7 +197,8 @@ class DateViewModelTests {
         assertEquals(0, dateUiState.dayEventList.size)
     }
 
-    private fun helperCalendarFun(calendar: GregorianCalendar){}
+    private fun helperDateFun(calendar: GregorianCalendar){}
+    private fun helperWeatherFun(calendar: GregorianCalendar){}
 
     private suspend fun addThreeEventToDb() {
         repository.insertStream(event1)

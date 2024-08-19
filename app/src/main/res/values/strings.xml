@@ -48,6 +48,8 @@
     <string name="start_time_toast_message">Please provide a start time!</string>
     <string name="end_time_toast_message">Please provide an end time!</string>
     <string name="time_toast_message">Start time and end time must be 30 min apart!</string>
+    <string name="weather">weather</string>
+    <string name="no_weather_available">No Weather Available.</string>
 
     <string-array name="days">
         <item>Sunday</item>

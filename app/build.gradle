@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'com.google.devtools.ksp' version "1.5.31-1.0.0"
+    id 'org.jetbrains.kotlin.plugin.serialization' version "1.8.10"
 }
 
 android {
@@ -81,8 +82,24 @@ dependencies {
     ksp "androidx.room:room-compiler:2.5.1"
     implementation 'androidx.room:room-ktx:2.5.1'
 
+    // Retrofit
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+
+    // Permissions
+    api 'androidx.activity:activity-ktx:1.2.0-alpha07'
+    api 'androidx.fragment:fragment-ktx:1.3.0-alpha07'
+
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
+
+    // Location Service
+    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'androidx.activity:activity-ktx:1.3.0'
+    implementation 'androidx.fragment:fragment-ktx:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
 
     // Date-Time Picker & LocalDate Desugaring
     implementation 'io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc'

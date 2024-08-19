@@ -17,9 +17,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,11 +40,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import ca.moraru.calendarapp.R
 import ca.moraru.calendarapp.data.Event
 import ca.moraru.calendarapp.data.doubleToHourString
-import ca.moraru.calendarapp.ui.ViewModelProvider
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.MaterialDialogState
 import com.vanpra.composematerialdialogs.datetime.date.datepicker
@@ -60,6 +58,7 @@ import java.util.GregorianCalendar
 @Composable
 fun CreateEventScreen(
     currentDate: GregorianCalendar,
+    viewModel: CreateEventViewModel,
     backNavigation: () -> Unit,
     updateDate: (GregorianCalendar) -> Unit
 ) {
@@ -71,7 +70,6 @@ fun CreateEventScreen(
     var endTimeInput by rememberSaveable { mutableStateOf(0.0) }
 
     val context = LocalContext
-    val viewModel: CreateEventViewModel = viewModel(factory = ViewModelProvider.Factory)
     viewModel.updateDayEvents(dayInput)
 
     Scaffold(
@@ -83,12 +81,13 @@ fun CreateEventScreen(
                         fontWeight = FontWeight.Bold,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth(),
-                        fontSize = 25.sp
+                        fontSize = 25.sp,
+                        color = Color.White
                     )
                 },
                 colors = TopAppBarDefaults.largeTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                )
+                    containerColor = Color(0.22f, 0.255f, 0.616f, 1.0f),
+                ),
             )
         },
         bottomBar = {
@@ -242,7 +241,10 @@ fun InputFields(
                 )
                 Button(
                     onClick = { dateDialog.show() },
-                    modifier = Modifier.width(65.dp)
+                    modifier = Modifier.width(65.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0.216f, 0.447f, 0.847f, 1.0f)
+                    )
                 ) {
                     Icon(
                         Icons.Default.DateRange, contentDescription = context.current.resources.getString(R.string.date_description)
@@ -271,7 +273,10 @@ fun InputFields(
                 )
                 Button(
                     onClick = { timeStartDialog.show() },
-                    modifier = Modifier.width(65.dp)
+                    modifier = Modifier.width(65.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0.216f, 0.447f, 0.847f, 1.0f)
+                    )
                 ) {
                     Icon(
                         Icons.Default.DateRange, contentDescription = context.current.resources.getString(R.string.date_description)
@@ -300,7 +305,10 @@ fun InputFields(
                 )
                 Button(
                     onClick = { timeEndDialog.show() },
-                    modifier = Modifier.width(65.dp)
+                    modifier = Modifier.width(65.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color(0.216f, 0.447f, 0.847f, 1.0f)
+                    )
                 ) {
                     Icon(
                         Icons.Default.DateRange, contentDescription = context.current.resources.getString(R.string.date_description)
@@ -487,28 +495,37 @@ fun CreateFooter(
         modifier = Modifier
             .fillMaxWidth()
     ) {
-        Button(onClick = { backNavigation() })
+        Button(
+            onClick = { backNavigation() },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0.216f, 0.447f, 0.847f, 1.0f)
+            )
+        )
         {
             Text(text = context.current.resources.getString(R.string.cancel))
         }
-        Button(onClick = {
-            if (event.startTime >= event.endTime) {
-                Toast.makeText(currentContext, timesToastMessage, Toast.LENGTH_LONG).show()
-            } else if (viewModel.isConflictingHours(event)) {
-                Toast.makeText(currentContext, conflictToastMessage, Toast.LENGTH_LONG).show()
-            } else if (event.title.isEmpty()) {
-                Toast.makeText(currentContext, titleToastMessage, Toast.LENGTH_LONG).show()
-            } else if (event.description.isEmpty()) {
-                Toast.makeText(currentContext, descToastMessage, Toast.LENGTH_LONG).show()
-            } else if (event.location.isEmpty()) {
-                Toast.makeText(currentContext, locationToastMessage, Toast.LENGTH_LONG).show()
-            } else {
-                val updatedEvent = viewModel.createEvent(event)
-                viewModel.updateDayEvents(LocalDate.of(updatedEvent.year, updatedEvent.month + 1, updatedEvent.day))
-                updateDate(GregorianCalendar(updatedEvent.year, updatedEvent.month, updatedEvent.day))
-                backNavigation()
-            }
-        })
+        Button(
+            onClick = {
+                if (event.startTime >= event.endTime) {
+                    Toast.makeText(currentContext, timesToastMessage, Toast.LENGTH_LONG).show()
+                } else if (viewModel.isConflictingHours(event)) {
+                    Toast.makeText(currentContext, conflictToastMessage, Toast.LENGTH_LONG).show()
+                } else if (event.title.isEmpty()) {
+                    Toast.makeText(currentContext, titleToastMessage, Toast.LENGTH_LONG).show()
+                } else if (event.description.isEmpty()) {
+                    Toast.makeText(currentContext, descToastMessage, Toast.LENGTH_LONG).show()
+                } else if (event.location.isEmpty()) {
+                    Toast.makeText(currentContext, locationToastMessage, Toast.LENGTH_LONG).show()
+                } else {
+                    val updatedEvent = viewModel.createEvent(event)
+                    viewModel.updateDayEvents(LocalDate.of(updatedEvent.year, updatedEvent.month + 1, updatedEvent.day))
+                    updateDate(GregorianCalendar(updatedEvent.year, updatedEvent.month, updatedEvent.day))
+                    backNavigation()
+                }
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0.216f, 0.447f, 0.847f, 1.0f)
+            ))
         {
             Text(context.current.resources.getString(R.string.save))
         }

@@ -1,21 +1,72 @@
 package ca.moraru.calendarapp.uiTests
 
+import android.content.Context
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
+import ca.moraru.calendarapp.data.CalendarDatabase
+import ca.moraru.calendarapp.data.EventDao
+import ca.moraru.calendarapp.data.EventsRepository
+import ca.moraru.calendarapp.data.OfflineEventsRepository
+import ca.moraru.calendarapp.data.Weather
 import ca.moraru.calendarapp.ui.navigation.create.CreateEventScreen
+import ca.moraru.calendarapp.ui.navigation.create.CreateEventViewModel
 import ca.moraru.calendarapp.ui.navigation.date.DateScreen
+import ca.moraru.calendarapp.ui.navigation.date.DateViewModel
 import ca.moraru.calendarapp.ui.navigation.edit.EditEventScreen
+import ca.moraru.calendarapp.ui.navigation.edit.EditEventViewModel
 import ca.moraru.calendarapp.ui.navigation.menu.MenuScreen
+import ca.moraru.calendarapp.ui.navigation.menu.MenuViewModel
 import ca.moraru.calendarapp.ui.navigation.view.ViewEventScreen
+import ca.moraru.calendarapp.ui.navigation.view.ViewEventViewModel
+import org.junit.After
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import java.io.IOException
 import java.util.GregorianCalendar
 
 class UITests {
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    private lateinit var eventDao: EventDao
+    private lateinit var calendarDatabase: CalendarDatabase
+    private lateinit var repository: OfflineEventsRepository
+
+    private lateinit var viewModelMenu: MenuViewModel
+    private lateinit var viewModelDate: DateViewModel
+    private lateinit var viewModelView: ViewEventViewModel
+    private lateinit var viewModelEdit: EditEventViewModel
+    private lateinit var viewModelCreate: CreateEventViewModel
+
+    @Before
+    fun createDb() {
+        val context: Context = ApplicationProvider.getApplicationContext()
+        calendarDatabase = Room.inMemoryDatabaseBuilder(context, CalendarDatabase::class.java)
+            .allowMainThreadQueries()
+            .build()
+        eventDao = calendarDatabase.eventDao()
+        repository = OfflineEventsRepository(eventDao)
+
+        viewModelMenu = MenuViewModel(repository)
+        viewModelMenu.setupEventList()
+        viewModelDate = DateViewModel(repository)
+        viewModelView = ViewEventViewModel(repository)
+        viewModelEdit = EditEventViewModel(repository)
+        viewModelCreate = CreateEventViewModel(repository)
+    }
+
+    @After
+    @Throws(IOException::class)
+    fun closeDb() {
+        if (::calendarDatabase.isInitialized) {
+            calendarDatabase.close()
+        }
+    }
 
     @Test
     fun uIMenuTest(){
@@ -24,7 +75,10 @@ class UITests {
                 currentDate = GregorianCalendar(),
                 updateDate = {},
                 changeView = {},
-                createEventNavigation = {}
+                createEventNavigation = {},
+                viewModel = viewModelMenu,
+                holidayData = emptyList(),
+                weatherDays = emptyList()
             )
         }
 
@@ -52,7 +106,11 @@ class UITests {
                 updateDate = {},
                 backNavigation = {},
                 viewEventNavigation = {},
-                createEventNavigation = {}
+                viewModel = viewModelDate,
+                createEventNavigation = {},
+                currentWeather = Weather("", 0.0, 0.0, 0),
+                updateWeather = {},
+                holidayData = emptyList()
             )
         }
 
@@ -71,7 +129,8 @@ class UITests {
             ViewEventScreen(
                 currentEventId = 1,
                 backNavigation = {},
-                changeEditView = {}
+                changeEditView = {},
+                viewModel = viewModelView
             )
         }
 
@@ -93,7 +152,8 @@ class UITests {
                 currentEventId = 1,
                 updateEvent = {},
                 updateDate = {},
-                backNavigation = {}
+                backNavigation = {},
+                viewModel = viewModelEdit
             )
         }
 
@@ -110,7 +170,8 @@ class UITests {
             CreateEventScreen(
                 currentDate = GregorianCalendar(),
                 updateDate = {},
-                backNavigation = {}
+                backNavigation = {},
+                viewModel = viewModelCreate
             )
         }
 

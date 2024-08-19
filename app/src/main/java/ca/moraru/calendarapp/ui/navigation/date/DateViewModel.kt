@@ -1,9 +1,17 @@
 package ca.moraru.calendarapp.ui.navigation.date
 
+import android.Manifest
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
 import android.util.Log
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import ca.moraru.calendarapp.data.Event
 import ca.moraru.calendarapp.data.EventsRepository
+import ca.moraru.calendarapp.model.WeatherModel
+import ca.moraru.calendarapp.model.WeatherRepository
+import com.google.android.gms.location.FusedLocationProviderClient
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,10 +22,12 @@ import java.util.Calendar
 import java.util.GregorianCalendar
 
 data class DateUiState(
-    val dayEventList: List<Event> = listOf()
+    val dayEventList: List<Event> = listOf(),
 )
 
-class DateViewModel(private val eventsRepository: EventsRepository) : ViewModel() {
+class DateViewModel(
+    private val eventsRepository: EventsRepository
+) : ViewModel() {
     private val _dateUiState: MutableStateFlow<DateUiState> = MutableStateFlow(DateUiState())
     val dateUiState: StateFlow<DateUiState> = _dateUiState.asStateFlow()
 
@@ -85,7 +95,8 @@ class DateViewModel(private val eventsRepository: EventsRepository) : ViewModel(
 
     fun moveDayBackwards(
         calendar: GregorianCalendar,
-        updateDate: (GregorianCalendar) -> Unit
+        updateDate: (GregorianCalendar) -> Unit,
+        updateWeather: (GregorianCalendar) -> Unit
     ) {
         var listOfEvents: List<Event> = listOf()
         runBlocking {
@@ -97,6 +108,7 @@ class DateViewModel(private val eventsRepository: EventsRepository) : ViewModel(
                 )
                 newCalendar.add(Calendar.DAY_OF_MONTH, -1)
                 updateDate(newCalendar)
+                updateWeather(newCalendar)
 
                 listOfEvents = eventsRepository.getDateEventsStream(
                     newCalendar.get(Calendar.YEAR),
@@ -116,7 +128,8 @@ class DateViewModel(private val eventsRepository: EventsRepository) : ViewModel(
 
     fun moveDayForwards(
         calendar: GregorianCalendar,
-        updateDate: (GregorianCalendar) -> Unit
+        updateDate: (GregorianCalendar) -> Unit,
+        updateWeather: (GregorianCalendar) -> Unit
     ) {
         var listOfEvents: List<Event> = listOf()
         runBlocking {
@@ -128,6 +141,7 @@ class DateViewModel(private val eventsRepository: EventsRepository) : ViewModel(
                 )
                 newCalendar.add(Calendar.DAY_OF_MONTH, 1)
                 updateDate(newCalendar)
+                updateWeather(newCalendar)
 
                 listOfEvents = eventsRepository.getDateEventsStream(
                     newCalendar.get(Calendar.YEAR),

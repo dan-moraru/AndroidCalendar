@@ -25,11 +25,14 @@ object ViewModelProvider {
             )
         }
         initializer {
-            NavigationViewModel()
+            NavigationViewModel(
+                calendarApplication().container.holidayRepository,
+                calendarApplication().container.weatherRepository
+            )
         }
         initializer {
             ViewEventViewModel(
-                calendarApplication().container.eventsRepository
+                calendarApplication().container.eventsRepository,
             )
         }
         initializer {

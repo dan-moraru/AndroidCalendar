@@ -1,5 +1,6 @@
 package ca.moraru.calendarapp.navTests
 
+import android.content.Context
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -9,9 +10,16 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
+import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import ca.moraru.calendarapp.ui.navigation.CalendarApp
 import ca.moraru.calendarapp.ui.navigation.CalendarScreen
 import ca.moraru.calendarapp.R
+import ca.moraru.calendarapp.data.CalendarDatabase
+import ca.moraru.calendarapp.data.OfflineEventsRepository
+import ca.moraru.calendarapp.ui.navigation.menu.MenuViewModel
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import org.junit.Test
 import org.junit.Before
 import org.junit.Rule
@@ -22,12 +30,14 @@ import org.junit.Rule
 // WARNING: This will flush out your current data beware
 // Because these tests we're thoroughly tested with the first milestone, it was not
 // a main focus for this milestone
+// Once you've run the app, make sure to re-comment the line to prevent test mishaps
 
 class CalendarScreenNavTest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
 
     private lateinit var navController: TestNavHostController
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     @Before
     fun setupCalendarNavHost() {
@@ -35,7 +45,11 @@ class CalendarScreenNavTest {
             navController = TestNavHostController(LocalContext.current).apply {
                 navigatorProvider.addNavigator(ComposeNavigator())
             }
-            CalendarApp(navController = navController)
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(LocalContext.current)
+            CalendarApp(
+                navController = navController,
+                fusedLocationClient = fusedLocationProviderClient
+            )
         }
     }
 
@@ -91,10 +105,12 @@ class CalendarScreenNavTest {
 
     @Test
     fun calendarNavHost_clickDeleteFromEventScreen_navigatesToMenuScreen() {
-        navigateToEventScreen()
+        navigateToRemoveableEventScreen()
         composeTestRule.onNodeWithStringId(R.string.delete_button)
             .performClick()
-        navController.assertCurrentRouteName(CalendarScreen.ViewEvent.name)
+        composeTestRule.onNodeWithStringId(R.string.confirm)
+            .performClick()
+        navController.assertCurrentRouteName(CalendarScreen.Date.name)
     }
 
     @Test
@@ -163,6 +179,12 @@ class CalendarScreenNavTest {
     private fun navigateToEventScreen() {
         navigateToDayScreen()
         composeTestRule.onNodeWithText("Soccer")
+            .performClick()
+    }
+
+    private fun navigateToRemoveableEventScreen() {
+        navigateToDayScreen()
+        composeTestRule.onNodeWithText("Lunch")
             .performClick()
     }
 

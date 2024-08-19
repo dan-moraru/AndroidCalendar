@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +42,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -52,11 +54,11 @@ import ca.moraru.calendarapp.data.doubleToHourString
 @Composable
 fun ViewEventScreen(
     currentEventId: Int,
+    viewModel: ViewEventViewModel,
     backNavigation: () -> Unit,
     changeEditView: () -> Unit,
 ) {
     val context = LocalContext
-    val viewModel: ViewEventViewModel = viewModel(factory = ViewModelProvider.Factory)
     viewModel.updateMenuUiState(currentEventId)
     val uiState by viewModel.eventViewUiState.collectAsState()
 
@@ -69,12 +71,13 @@ fun ViewEventScreen(
                          fontWeight = FontWeight.Bold,
                          textAlign = TextAlign.Center,
                          modifier = Modifier.fillMaxWidth(),
-                         fontSize = 25.sp
+                         fontSize = 25.sp,
+                         color = Color.White
                      )
                  },
                  colors = TopAppBarDefaults.largeTopAppBarColors(
-                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                 )
+                     containerColor = Color(0.22f, 0.255f, 0.616f, 1.0f),
+                 ),
              )
         },
         bottomBar = {
@@ -252,17 +255,26 @@ fun Buttons(
             .fillMaxWidth()
     ) {
         Button(
-            onClick = { backNavigation() }
+            onClick = { backNavigation() },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0.216f, 0.447f, 0.847f, 1.0f)
+            )
         ) {
             Text(context.current.resources.getString(R.string.back))
         }
         Button(
-            onClick = { changeEditView() }
+            onClick = { changeEditView() },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0.216f, 0.447f, 0.847f, 1.0f)
+            )
         ) {
             Text(context.current.resources.getString(R.string.edit))
         }
         Button(
-            onClick = { dialog = true }
+            onClick = { dialog = true },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0.216f, 0.447f, 0.847f, 1.0f)
+            )
         ) {
             Text(context.current.resources.getString(R.string.delete))
         }

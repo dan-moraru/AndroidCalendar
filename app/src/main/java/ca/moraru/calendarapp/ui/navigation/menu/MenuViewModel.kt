@@ -6,7 +6,11 @@ import ca.moraru.calendarapp.data.EventsRepository
 import java.util.Calendar
 import java.util.GregorianCalendar
 import android.util.Log
+import ca.moraru.calendarapp.model.HolidayModel
+import ca.moraru.calendarapp.model.HolidayRepository
+import ca.moraru.calendarapp.model.NetworkHolidayRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.update
@@ -18,9 +22,11 @@ data class MenuUiState(
     val monthEventList: List<Event> = listOf()
 )
 
-class MenuViewModel(private val eventsRepository: EventsRepository) : ViewModel() {
+class MenuViewModel(
+    private val eventsRepository: EventsRepository
+) : ViewModel() {
     private val _menuUiState: MutableStateFlow<MenuUiState> = MutableStateFlow(MenuUiState())
-    val menuUiState = _menuUiState.asStateFlow()
+    val menuUiState: StateFlow<MenuUiState> = _menuUiState.asStateFlow()
 
     init {
 //        setupEventList()
@@ -46,7 +52,7 @@ class MenuViewModel(private val eventsRepository: EventsRepository) : ViewModel(
         }
     }
 
-    private fun setupEventList() {
+    fun setupEventList() {
         val dates = listOf(4, 9, 12, 15, 19, 20, 24, 28)
         val listOfEvents: MutableList<Event> = mutableListOf()
 
